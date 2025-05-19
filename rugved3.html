@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gol Stopwatch</title>
+  <style>
+    body {
+      background-color: #101820;
+      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .circle-box {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #1c1c1c, #2e2e2e);
+      border: 6px solid #00e5ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
+    }
+
+    .circle-box h2 {
+      margin-top: -10px;
+      font-size: 1.5rem;
+      color: #00e5ff;
+    }
+
+    #timeDisplay {
+      font-size: 2.4rem;
+      margin: 15px 0;
+      letter-spacing: 2px;
+    }
+
+    .btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btns button {
+      padding: 10px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 20px;
+      background-color: #00e5ff;
+      color: #000;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btns button:hover {
+      background-color: #00bcd4;
+      transform: scale(1.05);
+    }
+
+    .btns .stop {
+      background-color: #ff3d00;
+    }
+
+    .btns .stop:hover {
+      background-color: #e53935;
+    }
+  </style>
+</head>
+<body>
+  <div class="circle-box">
+    <h2>Stopwatch</h2>
+    <div id="timeDisplay">00:00:00</div>
+    <div class="btns">
+      <button id="toggle">Start</button>
+      <button class="stop" id="clear">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let hr = 0, min = 0, sec = 0;
+    let timer = null;
+    let running = false;
+    const output = document.getElementById('timeDisplay');
+    const toggle = document.getElementById('toggle');
+    const clear = document.getElementById('clear');
+
+    function renderTime() {
+      const format = n => n.toString().padStart(2, '0');
+      output.textContent = ${format(hr)}:${format(min)}:${format(sec)};
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        sec++;
+        if (sec === 60) {
+          sec = 0;
+          min++;
+          if (min === 60) {
+            min = 0;
+            hr++;
+          }
+        }
+        renderTime();
+      }, 1000);
+    }
+
+    toggle.onclick = () => {
+      if (!running) {
+        startTimer();
+        toggle.textContent = "Pause";
+      } else {
+        clearInterval(timer);
+        toggle.textContent = "Start";
+      }
+      running = !running;
+    };
+
+    clear.onclick = () => {
+      clearInterval(timer);
+      hr = min = sec = 0;
+      renderTime();
+      toggle.textContent = "Start";
+      running = false;
+    };
+  </script>
+</body>
+</html>
